@@ -1,0 +1,39 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Trench coat collar -->
+  <path d="M60 160 L60 180 L80 190 L120 190 L140 180 L140 160 Z" fill="#2d2d2d"/>
+
+  <!-- Penguin body -->
+  <ellipse cx="100" cy="110" rx="48" ry="58" fill="#1a1a1a"/>
+
+  <!-- Penguin belly -->
+  <ellipse cx="100" cy="115" rx="32" ry="42" fill="#f8f9fa"/>
+
+  <!-- Penguin head -->
+  <ellipse cx="100" cy="85" rx="38" ry="40" fill="#1a1a1a"/>
+
+  <!-- Penguin face -->
+  <ellipse cx="100" cy="95" rx="28" ry="30" fill="#f8f9fa"/>
+
+  <!-- Penguin flippers suggestion -->
+  <ellipse cx="58" cy="120" rx="12" ry="35" fill="#1a1a1a"/>
+  <ellipse cx="142" cy="120" rx="12" ry="35" fill="#1a1a1a"/>
+
+  <!-- Fedora hat (dapper!) -->
+  <ellipse cx="100" cy="60" rx="50" ry="10" fill="#1a1a1a"/>
+  <rect x="70" y="45" width="60" height="15" rx="5" fill="#1a1a1a"/>
+  <rect x="75" y="40" width="50" height="20" rx="3" fill="#2d2d2d"/>
+  <rect x="77" y="42" width="46" height="3" fill="#fff"/>
+
+  <!-- Sunglasses -->
+  <rect x="72" y="85" width="24" height="14" rx="3" fill="#0a0a0a" opacity="0.95"/>
+  <rect x="104" y="85" width="24" height="14" rx="3" fill="#0a0a0a" opacity="0.95"/>
+  <line x1="96" y1="92" x2="104" y2="92" stroke="#1a1a1a" stroke-width="2"/>
+
+  <!-- Beak -->
+  <path d="M100 105 L95 112 L100 114 L105 112 Z" fill="#ff8c00"/>
+
+  <!-- Bow tie (extra dapper) -->
+  <path d="M90 130 L85 135 L90 140 L100 135 Z" fill="#e63946"/>
+  <path d="M110 130 L115 135 L110 140 L100 135 Z" fill="#e63946"/>
+  <ellipse cx="100" cy="135" rx="4" ry="5" fill="#a8001a"/>
+</svg>
