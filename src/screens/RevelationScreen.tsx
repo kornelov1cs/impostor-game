@@ -3,7 +3,7 @@
  */
 
 import React, { useState } from 'react';
-import { styled } from '@linaria/react';
+import styled from '@emotion/styled';
 import { useGameStore } from '../store/gameStore';
 import { AVATARS, type AvatarId } from '../data/avatars';
 import { Button } from '../components/Button/Button';

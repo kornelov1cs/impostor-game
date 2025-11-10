@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { styled } from '@linaria/react';
+import styled from '@emotion/styled';
 import { Button, Card } from './components';
 import { theme } from './styles/theme';
 import { fontsImport, globalReset, globalStyles, utilities } from './styles/global';

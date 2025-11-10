@@ -3,7 +3,7 @@
  * CSS reset, font imports, and base styling
  */
 
-import { css } from '@linaria/core';
+import { css } from '@emotion/react';
 import { theme } from './theme';
 
 /**

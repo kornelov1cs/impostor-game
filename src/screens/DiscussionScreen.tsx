@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { styled } from '@linaria/react';
+import styled from '@emotion/styled';
 import { useGameStore } from '../store/gameStore';
 import { Button } from '../components/Button/Button';
 import { Card } from '../components/Card/Card';
