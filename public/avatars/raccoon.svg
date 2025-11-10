@@ -1,0 +1,35 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Trench coat collar -->
+  <path d="M60 160 L60 180 L80 190 L120 190 L140 180 L140 160 Z" fill="#2d2d2d"/>
+
+  <!-- Raccoon head -->
+  <ellipse cx="100" cy="100" rx="48" ry="50" fill="#6b6b6b"/>
+
+  <!-- Raccoon ears -->
+  <ellipse cx="70" cy="65" rx="15" ry="20" fill="#6b6b6b"/>
+  <ellipse cx="130" cy="65" rx="15" ry="20" fill="#6b6b6b"/>
+  <ellipse cx="70" cy="67" rx="10" ry="13" fill="#4a4a4a"/>
+  <ellipse cx="130" cy="67" rx="10" ry="13" fill="#4a4a4a"/>
+
+  <!-- Natural bandit mask (partially covered by sunglasses) -->
+  <ellipse cx="85" cy="88" rx="18" ry="12" fill="#2d2d2d"/>
+  <ellipse cx="115" cy="88" rx="18" ry="12" fill="#2d2d2d"/>
+  <rect x="67" y="82" width="66" height="18" fill="#2d2d2d"/>
+
+  <!-- Raccoon snout -->
+  <ellipse cx="100" cy="115" rx="20" ry="18" fill="#b8b8b8"/>
+
+  <!-- Fedora hat -->
+  <ellipse cx="100" cy="62" rx="52" ry="10" fill="#1a1a1a"/>
+  <rect x="68" y="47" width="64" height="15" rx="5" fill="#1a1a1a"/>
+  <rect x="73" y="42" width="54" height="20" rx="3" fill="#2d2d2d"/>
+  <rect x="75" y="44" width="50" height="3" fill="#8b4513"/>
+
+  <!-- Sunglasses (on top of natural mask) -->
+  <rect x="70" y="85" width="25" height="15" rx="3" fill="#0a0a0a" opacity="0.95"/>
+  <rect x="105" y="85" width="25" height="15" rx="3" fill="#0a0a0a" opacity="0.95"/>
+  <line x1="95" y1="92" x2="105" y2="92" stroke="#1a1a1a" stroke-width="2"/>
+
+  <!-- Nose -->
+  <ellipse cx="100" cy="120" rx="5" ry="6" fill="#1a1a1a"/>
+</svg>

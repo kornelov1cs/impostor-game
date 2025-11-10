@@ -1,0 +1,39 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Trench coat collar -->
+  <path d="M60 160 L60 180 L80 190 L120 190 L140 180 L140 160 Z" fill="#2d2d2d"/>
+
+  <!-- Rabbit head -->
+  <ellipse cx="100" cy="100" rx="42" ry="45" fill="#f5f5f5"/>
+
+  <!-- Rabbit ears -->
+  <ellipse cx="80" cy="50" rx="12" ry="45" fill="#f5f5f5"/>
+  <ellipse cx="120" cy="50" rx="12" ry="45" fill="#f5f5f5"/>
+  <ellipse cx="80" cy="52" rx="7" ry="35" fill="#ffb6c1"/>
+  <ellipse cx="120" cy="52" rx="7" ry="35" fill="#ffb6c1"/>
+
+  <!-- Rabbit cheeks -->
+  <ellipse cx="75" cy="110" rx="18" ry="15" fill="#fff"/>
+  <ellipse cx="125" cy="110" rx="18" ry="15" fill="#fff"/>
+
+  <!-- Fedora hat -->
+  <ellipse cx="100" cy="48" rx="48" ry="10" fill="#1a1a1a"/>
+  <rect x="72" y="33" width="56" height="15" rx="5" fill="#1a1a1a"/>
+  <rect x="77" y="28" width="46" height="20" rx="3" fill="#2d2d2d"/>
+  <rect x="79" y="30" width="42" height="3" fill="#666"/>
+
+  <!-- Sunglasses -->
+  <rect x="72" y="85" width="24" height="14" rx="3" fill="#0a0a0a" opacity="0.9"/>
+  <rect x="104" y="85" width="24" height="14" rx="3" fill="#0a0a0a" opacity="0.9"/>
+  <line x1="96" y1="92" x2="104" y2="92" stroke="#1a1a1a" stroke-width="2"/>
+
+  <!-- Nose -->
+  <ellipse cx="100" cy="108" rx="4" ry="5" fill="#ffb6c1"/>
+
+  <!-- Mouth -->
+  <path d="M100 108 L100 115" stroke="#666" stroke-width="1.5"/>
+  <path d="M92 115 Q100 120 108 115" fill="none" stroke="#666" stroke-width="1.5"/>
+
+  <!-- Whisker dots -->
+  <circle cx="68" cy="105" r="2" fill="#666"/>
+  <circle cx="132" cy="105" r="2" fill="#666"/>
+</svg>
