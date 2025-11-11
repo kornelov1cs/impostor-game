@@ -3,150 +3,11 @@
  */
 
 import React, { useEffect } from 'react';
-import { styled } from '@linaria/react';
 import { useGameStore } from '../store/gameStore';
 import { AVATARS, type AvatarId } from '../data/avatars';
-import { Button } from '../components/Button/Button';
-import { Card } from '../components/Card/Card';
-import { theme } from '../styles/theme';
-import { fadeInUp, spotlightReveal, glowPulseGold, glowPulseImpostor } from '../styles/animations';
-
-const Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: ${theme.spacing[6]};
-  text-align: center;
-`;
-
-const Title = styled.h1<{ $isWinner: boolean }>`
-  font-family: ${theme.typography.fonts.heading};
-  font-size: ${theme.typography.sizes['4xl']};
-  color: ${props => props.$isWinner ? theme.colors.accent.gold : theme.colors.role.impostorGlow};
-  text-shadow: ${props => props.$isWinner ? theme.shadows.glow.gold : theme.shadows.glow.impostor};
-  margin-bottom: ${theme.spacing[8]};
-  animation: ${fadeInUp} ${theme.transitions.duration.slow} ${theme.transitions.timing.easeOut};
-`;
-
-const RevealCard = styled(Card)<{ $isImpostor: boolean }>`
-  max-width: 500px;
-  margin-bottom: ${theme.spacing[6]};
-  animation: ${spotlightReveal} 1s ease-out forwards;
-  border-color: ${props => props.$isImpostor ? theme.colors.role.impostor : theme.colors.accent.gold};
-  animation: ${props => props.$isImpostor ? glowPulseImpostor : glowPulseGold} 2s ease-in-out infinite;
-`;
-
-const ImpostorReveal = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: ${theme.spacing[4]};
-  padding: ${theme.spacing[6]};
-
-  img {
-    width: 150px;
-    height: 150px;
-    border-radius: ${theme.radius.lg};
-    border: 3px solid ${theme.colors.role.impostor};
-  }
-
-  h2 {
-    font-family: ${theme.typography.fonts.heading};
-    font-size: ${theme.typography.sizes['3xl']};
-    color: ${theme.colors.role.impostorGlow};
-    text-shadow: ${theme.shadows.glow.impostor};
-  }
-
-  p {
-    color: ${theme.colors.text.secondary};
-    font-size: ${theme.typography.sizes.lg};
-  }
-`;
-
-const SecretWordReveal = styled.div`
-  margin-top: ${theme.spacing[6]};
-  padding: ${theme.spacing[6]};
-  background: ${theme.colors.background.secondary};
-  border: 1px solid ${theme.colors.border.active};
-  border-radius: ${theme.radius.md};
-  max-width: 500px;
-
-  h3 {
-    font-family: ${theme.typography.fonts.heading};
-    font-size: ${theme.typography.sizes.xl};
-    color: ${theme.colors.text.gold};
-    margin-bottom: ${theme.spacing[3]};
-  }
-
-  p {
-    font-size: ${theme.typography.sizes['3xl']};
-    font-weight: ${theme.typography.weights.bold};
-    color: ${theme.colors.accent.gold};
-    text-shadow: ${theme.shadows.glow.gold};
-  }
-`;
-
-const VotingResults = styled.div`
-  max-width: 600px;
-  margin-bottom: ${theme.spacing[8]};
-`;
-
-const VoteRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${theme.spacing[3]};
-  background: ${theme.colors.background.secondary};
-  border: 1px solid ${theme.colors.border.default};
-  border-radius: ${theme.radius.sm};
-  margin-bottom: ${theme.spacing[2]};
-
-  .voter {
-    display: flex;
-    align-items: center;
-    gap: ${theme.spacing[3]};
-
-    img {
-      width: 40px;
-      height: 40px;
-      border-radius: ${theme.radius.sm};
-    }
-
-    span {
-      color: ${theme.colors.text.primary};
-    }
-  }
-
-  .arrow {
-    color: ${theme.colors.text.muted};
-    font-size: ${theme.typography.sizes.xl};
-  }
-
-  .target {
-    display: flex;
-    align-items: center;
-    gap: ${theme.spacing[3]};
-
-    img {
-      width: 40px;
-      height: 40px;
-      border-radius: ${theme.radius.sm};
-    }
-
-    span {
-      color: ${theme.colors.text.primary};
-      font-weight: ${theme.typography.weights.semibold};
-    }
-  }
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: ${theme.spacing[4]};
-  max-width: 500px;
-`;
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 export const ResultsScreen: React.FC = () => {
   const { players, secretWord, calculateVotes, winner, setWinner, nextRound, resetGame } = useGameStore();
@@ -180,70 +41,105 @@ export const ResultsScreen: React.FC = () => {
   };
 
   return (
-    <Container>
-      <Title $isWinner={civiliansWon}>
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+      <h1
+        className={cn(
+          "font-bold text-4xl mb-8 game-title animate-fadeInUp",
+          civiliansWon ? "text-primary" : "text-destructive"
+        )}
+      >
         {civiliansWon ? '🎉 Civilians Win!' : '😈 Impostor Wins!'}
-      </Title>
+      </h1>
 
-      <RevealCard variant="spotlight" size="lg" withGlow $isImpostor={!isImpostorEliminated}>
-        <Card.Header>
-          <Card.Title>The Impostor Was...</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          <ImpostorReveal>
-            <img src={AVATARS[impostorPlayer.avatar as AvatarId]?.svgPath ?? ''} alt={impostorPlayer.name} />
-            <h2>{impostorPlayer.name}</h2>
-            {isImpostorEliminated ? (
-              <p>The group successfully identified the impostor!</p>
-            ) : (
-              <p>The impostor successfully deceived the group!</p>
-            )}
-          </ImpostorReveal>
-        </Card.Body>
-      </RevealCard>
+      <Card
+        className={cn(
+          "max-w-[500px] mb-6 shadow-lg border-2 animate-glowPulse",
+          isImpostorEliminated ? "border-primary" : "border-destructive"
+        )}
+      >
+        <CardHeader>
+          <CardTitle>The Impostor Was...</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col items-center gap-4 p-6">
+            <img
+              src={AVATARS[impostorPlayer.avatar as AvatarId]?.svgPath ?? ''}
+              alt={impostorPlayer.name}
+              className={cn(
+                "w-[150px] h-[150px] rounded-lg border-3",
+                isImpostorEliminated ? "border-primary" : "border-destructive"
+              )}
+            />
+            <h2
+              className={cn(
+                "font-bold text-3xl game-title",
+                isImpostorEliminated ? "text-primary" : "text-destructive"
+              )}
+            >
+              {impostorPlayer.name}
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              {isImpostorEliminated
+                ? 'The group successfully identified the impostor!'
+                : 'The impostor successfully deceived the group!'}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
-      <SecretWordReveal>
-        <h3>The Secret Word Was:</h3>
-        <p>{secretWord}</p>
-      </SecretWordReveal>
+      <div className="mt-6 p-6 bg-card border border-primary/50 rounded-md max-w-[500px]">
+        <h3 className="font-bold text-xl text-primary mb-3">The Secret Word Was:</h3>
+        <p className="text-3xl font-bold text-primary game-title">{secretWord}</p>
+      </div>
 
-      <Card variant="outlined" size="lg" style={{ maxWidth: '600px', marginTop: theme.spacing[8], marginBottom: theme.spacing[8] }}>
-        <Card.Header>
-          <Card.Title>Voting Results</Card.Title>
-          <Card.Subtitle>Who voted for whom</Card.Subtitle>
-        </Card.Header>
-        <Card.Body>
-          <VotingResults>
+      <Card className="max-w-[600px] mt-8 mb-8 shadow-lg border-border/50">
+        <CardHeader>
+          <CardTitle>Voting Results</CardTitle>
+          <CardDescription>Who voted for whom</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
             {players.map((voter) => {
               const target = players.find((p) => p.id === voter.votedFor);
               if (!target) return null;
 
               return (
-                <VoteRow key={voter.id}>
-                  <div className="voter">
-                    <img src={AVATARS[voter.avatar as AvatarId]?.svgPath ?? ''} alt={voter.name} />
-                    <span>{voter.name}</span>
+                <div
+                  key={voter.id}
+                  className="flex items-center justify-between p-3 bg-card border border-border rounded-sm"
+                >
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={AVATARS[voter.avatar as AvatarId]?.svgPath ?? ''}
+                      alt={voter.name}
+                      className="w-10 h-10 rounded-sm"
+                    />
+                    <span className="text-foreground">{voter.name}</span>
                   </div>
-                  <div className="arrow">→</div>
-                  <div className="target">
-                    <img src={AVATARS[target.avatar as AvatarId]?.svgPath ?? ''} alt={target.name} />
-                    <span>{target.name}</span>
+                  <div className="text-muted-foreground text-xl">→</div>
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={AVATARS[target.avatar as AvatarId]?.svgPath ?? ''}
+                      alt={target.name}
+                      className="w-10 h-10 rounded-sm"
+                    />
+                    <span className="text-foreground font-semibold">{target.name}</span>
                   </div>
-                </VoteRow>
+                </div>
               );
             })}
-          </VotingResults>
-        </Card.Body>
+          </div>
+        </CardContent>
       </Card>
 
-      <ButtonGroup>
+      <div className="flex gap-4 max-w-[500px]">
         <Button variant="secondary" size="lg" onClick={handleNextRound}>
           🔄 Play Another Round
         </Button>
-        <Button variant="primary" size="lg" withGlow onClick={handlePlayAgain}>
+        <Button size="lg" className="animate-glowPulse" onClick={handlePlayAgain}>
           🎮 New Game
         </Button>
-      </ButtonGroup>
-    </Container>
+      </div>
+    </div>
   );
 };

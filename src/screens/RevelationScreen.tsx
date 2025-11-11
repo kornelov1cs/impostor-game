@@ -3,125 +3,11 @@
  */
 
 import React, { useState } from 'react';
-import { styled } from '@linaria/react';
 import { useGameStore } from '../store/gameStore';
 import { AVATARS, type AvatarId } from '../data/avatars';
-import { Button } from '../components/Button/Button';
-import { Card } from '../components/Card/Card';
-import { theme } from '../styles/theme';
-import { spotlightReveal, glowPulseGold, glowPulseImpostor } from '../styles/animations';
-
-const Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: ${theme.spacing[6]};
-  text-align: center;
-`;
-
-const PlayerInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: ${theme.spacing[4]};
-  margin-bottom: ${theme.spacing[8]};
-`;
-
-const AvatarContainer = styled.div`
-  width: 120px;
-  height: 120px;
-  border-radius: ${theme.radius.lg};
-  overflow: hidden;
-  border: 3px solid ${theme.colors.accent.gold};
-  box-shadow: ${theme.shadows.glow.gold};
-  animation: ${glowPulseGold} 2s ease-in-out infinite;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
-
-const PlayerName = styled.h2`
-  font-family: ${theme.typography.fonts.heading};
-  font-size: ${theme.typography.sizes['3xl']};
-  color: ${theme.colors.accent.gold};
-  text-shadow: ${theme.shadows.glow.gold};
-`;
-
-const Instruction = styled.p`
-  font-size: ${theme.typography.sizes.lg};
-  color: ${theme.colors.text.secondary};
-  margin-bottom: ${theme.spacing[6]};
-  max-width: 500px;
-`;
-
-const WordRevealCard = styled(Card)<{ $isRevealed: boolean; $isImpostor: boolean }>`
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  transition: all ${theme.transitions.duration.slow} ${theme.transitions.timing.easeOut};
-
-  ${props => props.$isRevealed && props.$isImpostor && `
-    border-color: ${theme.colors.role.impostor};
-    box-shadow: ${theme.shadows.glow.impostor};
-    animation: ${glowPulseImpostor} 2s ease-in-out infinite;
-  `}
-
-  ${props => props.$isRevealed && !props.$isImpostor && `
-    animation: ${spotlightReveal} 1s ease-out forwards;
-  `}
-`;
-
-const SecretWord = styled.div<{ $isImpostor: boolean }>`
-  font-family: ${theme.typography.fonts.heading};
-  font-size: ${theme.typography.sizes['5xl']};
-  font-weight: ${theme.typography.weights.bold};
-  color: ${props => props.$isImpostor ? theme.colors.role.impostorGlow : theme.colors.accent.gold};
-  text-shadow: ${props => props.$isImpostor ? theme.shadows.glow.impostor : theme.shadows.glow.gold};
-  letter-spacing: ${theme.typography.letterSpacing.wider};
-  padding: ${theme.spacing[8]} ${theme.spacing[4]};
-  text-transform: uppercase;
-`;
-
-const RoleLabel = styled.div<{ $isImpostor: boolean }>`
-  font-size: ${theme.typography.sizes.sm};
-  font-weight: ${theme.typography.weights.semibold};
-  color: ${props => props.$isImpostor ? theme.colors.role.impostorGlow : theme.colors.text.muted};
-  text-transform: uppercase;
-  letter-spacing: ${theme.typography.letterSpacing.wide};
-  margin-bottom: ${theme.spacing[4]};
-`;
-
-const WarningText = styled.p`
-  font-size: ${theme.typography.sizes.sm};
-  color: ${theme.colors.text.muted};
-  font-style: italic;
-  margin-top: ${theme.spacing[4]};
-`;
-
-const ProgressIndicator = styled.div`
-  display: flex;
-  gap: ${theme.spacing[2]};
-  justify-content: center;
-  margin-top: ${theme.spacing[6]};
-`;
-
-const ProgressDot = styled.div<{ $active: boolean }>`
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: ${props => props.$active ? theme.colors.accent.gold : theme.colors.background.secondary};
-  border: 1px solid ${props => props.$active ? theme.colors.accent.gold : theme.colors.border.default};
-  transition: all ${theme.transitions.duration.normal} ${theme.transitions.timing.easeInOut};
-
-  ${props => props.$active && `
-    box-shadow: ${theme.shadows.glow.gold};
-  `}
-`;
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 export const RevelationScreen: React.FC = () => {
   const { players, currentPlayerIndex, secretWord, nextPlayer } = useGameStore();
@@ -142,74 +28,85 @@ export const RevelationScreen: React.FC = () => {
   };
 
   return (
-    <Container>
-      <PlayerInfo>
-        <AvatarContainer>
-          <img src={AVATARS[currentPlayer.avatar as AvatarId]?.svgPath ?? ''} alt={currentPlayer.name} />
-        </AvatarContainer>
-        <PlayerName>{currentPlayer.name}'s Turn</PlayerName>
-      </PlayerInfo>
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+      <div className="flex flex-col items-center gap-4 mb-8">
+        <div className="w-[120px] h-[120px] rounded-lg overflow-hidden border-3 border-primary shadow-lg animate-glowPulse">
+          <img
+            src={AVATARS[currentPlayer.avatar as AvatarId]?.svgPath ?? ''}
+            alt={currentPlayer.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <h2 className="font-bold text-3xl text-primary game-title">{currentPlayer.name}'s Turn</h2>
+      </div>
 
-      <Instruction>
+      <p className="text-lg text-muted-foreground mb-6 max-w-[500px]">
         {isRevealed
           ? 'Memorize your word, then hide it and pass the device.'
           : 'Tap the button below to see your word. Keep it secret!'}
-      </Instruction>
+      </p>
 
-      <WordRevealCard
-        variant={isRevealed ? 'spotlight' : 'elevated'}
-        size="lg"
-        withGlow={isRevealed}
-        $isRevealed={isRevealed}
-        $isImpostor={currentPlayer.isImpostor}
+      <Card
+        className={cn(
+          "min-h-[300px] flex flex-col transition-all duration-700",
+          isRevealed && currentPlayer.isImpostor && "border-destructive shadow-lg animate-glowPulse",
+          isRevealed && !currentPlayer.isImpostor && "border-primary shadow-lg"
+        )}
       >
-        <Card.Body style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <CardContent className="flex-1 flex flex-col items-center justify-center p-8">
           {isRevealed ? (
             <>
-              <RoleLabel $isImpostor={currentPlayer.isImpostor}>
+              <div
+                className={cn(
+                  "text-sm font-semibold uppercase tracking-wider mb-4",
+                  currentPlayer.isImpostor ? "text-destructive" : "text-muted-foreground"
+                )}
+              >
                 {currentPlayer.isImpostor ? 'You are the Impostor' : 'Your Secret Word'}
-              </RoleLabel>
-              <SecretWord $isImpostor={currentPlayer.isImpostor}>
+              </div>
+              <div
+                className={cn(
+                  "font-bold text-5xl tracking-wider p-8 uppercase",
+                  currentPlayer.isImpostor ? "text-destructive game-title" : "text-primary game-title"
+                )}
+              >
                 {currentPlayer.isImpostor ? 'IMPOSTOR' : secretWord}
-              </SecretWord>
-              <WarningText>
+              </div>
+              <p className="text-sm text-muted-foreground italic mt-4">
                 {currentPlayer.isImpostor
-                  ? 'You don\'t know the secret word. Blend in by giving clever clues!'
-                  : 'Give clues that prove you know the word, but don\'t make it too obvious!'}
-              </WarningText>
+                  ? "You don't know the secret word. Blend in by giving clever clues!"
+                  : "Give clues that prove you know the word, but don't make it too obvious!"}
+              </p>
             </>
           ) : (
-            <Button
-              variant="primary"
-              size="lg"
-              withGlow
-              onClick={handleToggleReveal}
-            >
+            <Button size="lg" className="animate-glowPulse" onClick={handleToggleReveal}>
               👁️ Tap to Reveal
             </Button>
           )}
-        </Card.Body>
-      </WordRevealCard>
+        </CardContent>
+      </Card>
 
       {isRevealed && (
-        <div style={{ marginTop: theme.spacing[6], width: '100%', maxWidth: '500px' }}>
-          <Button
-            variant="primary"
-            size="lg"
-            fullWidth
-            withGlow
-            onClick={handleNext}
-          >
+        <div className="mt-6 w-full max-w-[500px]">
+          <Button size="lg" className="w-full animate-glowPulse" onClick={handleNext}>
             {isLastPlayer ? '✅ Everyone Has Seen Their Word' : '👉 Pass to Next Player'}
           </Button>
         </div>
       )}
 
-      <ProgressIndicator>
+      <div className="flex gap-2 justify-center mt-6">
         {players.map((_, index) => (
-          <ProgressDot key={index} $active={index <= currentPlayerIndex} />
+          <div
+            key={index}
+            className={cn(
+              "w-3 h-3 rounded-full border transition-all",
+              index <= currentPlayerIndex
+                ? "bg-primary border-primary shadow-lg"
+                : "bg-secondary border-border"
+            )}
+          />
         ))}
-      </ProgressIndicator>
-    </Container>
+      </div>
+    </div>
   );
 };

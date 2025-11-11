@@ -3,181 +3,21 @@
  */
 
 import React, { useState } from 'react';
-import { styled } from '@linaria/react';
 import { useGameStore } from '../store/gameStore';
 import { AVATARS, type AvatarId } from '../data/avatars';
 import { getCategoryNames } from '../data/words';
-import { Button } from '../components/Button/Button';
-import { Card } from '../components/Card/Card';
-import { theme } from '../styles/theme';
-import { fadeInUp } from '../styles/animations';
-
-const Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: ${theme.spacing[6]};
-`;
-
-const Title = styled.h1`
-  font-family: ${theme.typography.fonts.heading};
-  font-size: ${theme.typography.sizes['4xl']};
-  color: ${theme.colors.accent.gold};
-  text-shadow: ${theme.shadows.glow.gold};
-  margin-bottom: ${theme.spacing[2]};
-  text-align: center;
-  animation: ${fadeInUp} ${theme.transitions.duration.slow} ${theme.transitions.timing.easeOut};
-`;
-
-const Subtitle = styled.p`
-  font-size: ${theme.typography.sizes.lg};
-  color: ${theme.colors.text.secondary};
-  margin-bottom: ${theme.spacing[8]};
-  text-align: center;
-`;
-
-const Form = styled.form`
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing[6]};
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing[2]};
-`;
-
-const Label = styled.label`
-  font-size: ${theme.typography.sizes.sm};
-  font-weight: ${theme.typography.weights.semibold};
-  color: ${theme.colors.text.gold};
-  text-transform: uppercase;
-  letter-spacing: ${theme.typography.letterSpacing.wide};
-`;
-
-const Input = styled.input`
-  padding: ${theme.spacing[3]} ${theme.spacing[4]};
-  background: ${theme.colors.background.secondary};
-  border: 1px solid ${theme.colors.border.default};
-  border-radius: ${theme.radius.md};
-  color: ${theme.colors.text.primary};
-  font-family: ${theme.typography.fonts.body};
-  font-size: ${theme.typography.sizes.base};
-  transition: all ${theme.transitions.duration.normal} ${theme.transitions.timing.easeInOut};
-
-  &:focus {
-    outline: none;
-    border-color: ${theme.colors.border.active};
-    box-shadow: ${theme.shadows.glow.gold};
-  }
-
-  &::placeholder {
-    color: ${theme.colors.text.muted};
-  }
-`;
-
-const Select = styled.select`
-  padding: ${theme.spacing[3]} ${theme.spacing[4]};
-  background: ${theme.colors.background.secondary};
-  border: 1px solid ${theme.colors.border.default};
-  border-radius: ${theme.radius.md};
-  color: ${theme.colors.text.primary};
-  font-family: ${theme.typography.fonts.body};
-  font-size: ${theme.typography.sizes.base};
-  cursor: pointer;
-  transition: all ${theme.transitions.duration.normal} ${theme.transitions.timing.easeInOut};
-
-  &:focus {
-    outline: none;
-    border-color: ${theme.colors.border.active};
-    box-shadow: ${theme.shadows.glow.gold};
-  }
-`;
-
-const AvatarGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: ${theme.spacing[3]};
-  margin-top: ${theme.spacing[2]};
-`;
-
-const AvatarOption = styled.button<{ $selected: boolean }>`
-  aspect-ratio: 1;
-  border: 2px solid ${props => props.$selected ? theme.colors.accent.gold : theme.colors.border.default};
-  border-radius: ${theme.radius.md};
-  background: ${theme.colors.background.secondary};
-  padding: ${theme.spacing[2]};
-  cursor: pointer;
-  transition: all ${theme.transitions.duration.fast} ${theme.transitions.timing.easeInOut};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    border-color: ${theme.colors.accent.gold};
-    transform: translateY(-2px);
-    box-shadow: ${theme.shadows.glow.gold};
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  ${props => props.$selected && `
-    box-shadow: ${theme.shadows.glow.gold};
-    transform: scale(1.05);
-  `}
-`;
-
-const PlayersList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing[2]};
-`;
-
-const PlayerItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${theme.spacing[3]};
-  padding: ${theme.spacing[3]};
-  background: ${theme.colors.background.secondary};
-  border: 1px solid ${theme.colors.border.default};
-  border-radius: ${theme.radius.md};
-
-  img {
-    width: 40px;
-    height: 40px;
-    border-radius: ${theme.radius.sm};
-  }
-
-  span {
-    flex: 1;
-    color: ${theme.colors.text.primary};
-    font-weight: ${theme.typography.weights.medium};
-  }
-
-  button {
-    padding: ${theme.spacing[1]} ${theme.spacing[3]};
-    background: ${theme.colors.role.impostor};
-    border: none;
-    border-radius: ${theme.radius.sm};
-    color: ${theme.colors.text.primary};
-    font-size: ${theme.typography.sizes.sm};
-    cursor: pointer;
-    transition: all ${theme.transitions.duration.fast} ${theme.transitions.timing.easeInOut};
-
-    &:hover {
-      background: ${theme.colors.role.impostorGlow};
-    }
-  }
-`;
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 
 export const SetupScreen: React.FC = () => {
   const { players, addPlayer, removePlayer, startGame } = useGameStore();
@@ -213,21 +53,28 @@ export const SetupScreen: React.FC = () => {
   const canStartGame = players.length >= 3;
 
   return (
-    <Container>
-      <Title>🎭 Impostor</Title>
-      <Subtitle>A Shadow Theater Word Game</Subtitle>
+    <div className="min-h-screen flex flex-col items-center justify-center p-6">
+      <h1 className="text-5xl font-bold text-primary game-title mb-2 text-center animate-fadeInUp">
+        🎭 Impostor
+      </h1>
+      <p className="text-lg text-muted-foreground mb-8 text-center">
+        A Shadow Theater Word Game
+      </p>
 
-      <Form onSubmit={handleAddPlayer}>
-        <Card variant="elevated" size="lg">
-          <Card.Header>
-            <Card.Title>Add Players ({players.length}/12)</Card.Title>
-            <Card.Subtitle>Minimum 3 players to start</Card.Subtitle>
-          </Card.Header>
+      <form onSubmit={handleAddPlayer} className="w-full max-width-[600px] max-w-2xl flex flex-col gap-6">
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle>Add Players ({players.length}/12)</CardTitle>
+            <CardDescription>Minimum 3 players to start</CardDescription>
+          </CardHeader>
 
-          <Card.Body>
-            <FormGroup>
-              <Label>Player Name</Label>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="playerName" className="text-primary uppercase tracking-wider">
+                Player Name
+              </Label>
               <Input
+                id="playerName"
                 type="text"
                 placeholder="Enter player name..."
                 value={playerName}
@@ -235,88 +82,114 @@ export const SetupScreen: React.FC = () => {
                 maxLength={20}
                 autoFocus
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Choose Avatar</Label>
-              <AvatarGrid>
+            <div className="space-y-2">
+              <Label className="text-primary uppercase tracking-wider">Choose Avatar</Label>
+              <div className="grid grid-cols-4 gap-3">
                 {avatarIds.map((avatarId) => (
-                  <AvatarOption
+                  <button
                     key={avatarId}
                     type="button"
-                    $selected={selectedAvatar === avatarId}
+                    className={cn(
+                      "aspect-square border-2 rounded-md p-2 cursor-pointer transition-all hover:border-primary hover:shadow-lg hover:-translate-y-0.5",
+                      selectedAvatar === avatarId
+                        ? "border-primary shadow-lg scale-105 animate-glowPulse"
+                        : "border-border bg-card"
+                    )}
                     onClick={() => setSelectedAvatar(avatarId)}
                     title={AVATARS[avatarId]?.name ?? ''}
                   >
-                    <img src={AVATARS[avatarId]?.svgPath ?? ''} alt={AVATARS[avatarId]?.name ?? ''} />
-                  </AvatarOption>
+                    <img
+                      src={AVATARS[avatarId]?.svgPath ?? ''}
+                      alt={AVATARS[avatarId]?.name ?? ''}
+                      className="w-full h-full object-contain"
+                    />
+                  </button>
                 ))}
-              </AvatarGrid>
-            </FormGroup>
+              </div>
+            </div>
 
             <Button
               type="submit"
-              variant="primary"
-              fullWidth
-              withGlow
+              className="w-full animate-glowPulse"
+              size="lg"
               disabled={!playerName.trim() || players.length >= 12}
             >
               Add Player
             </Button>
-          </Card.Body>
+          </CardContent>
         </Card>
 
         {players.length > 0 && (
-          <Card variant="elevated" size="lg">
-            <Card.Header>
-              <Card.Title>Players</Card.Title>
-            </Card.Header>
-            <Card.Body>
-              <PlayersList>
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle>Players</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col gap-2">
                 {players.map((player) => (
-                  <PlayerItem key={player.id}>
-                    <img src={AVATARS[player.avatar as AvatarId]?.svgPath ?? ''} alt={player.name} />
-                    <span>{player.name}</span>
-                    <button onClick={() => removePlayer(player.id)}>Remove</button>
-                  </PlayerItem>
+                  <div
+                    key={player.id}
+                    className="flex items-center gap-3 p-3 bg-card border border-border rounded-md"
+                  >
+                    <img
+                      src={AVATARS[player.avatar as AvatarId]?.svgPath ?? ''}
+                      alt={player.name}
+                      className="w-10 h-10 rounded-sm"
+                    />
+                    <span className="flex-1 text-foreground font-medium">{player.name}</span>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removePlayer(player.id)}
+                    >
+                      Remove
+                    </Button>
+                  </div>
                 ))}
-              </PlayersList>
-            </Card.Body>
+              </div>
+            </CardContent>
           </Card>
         )}
 
         {players.length >= 3 && (
-          <Card variant="spotlight" size="lg" withGlow>
-            <Card.Header>
-              <Card.Title>Game Settings</Card.Title>
-            </Card.Header>
-            <Card.Body>
-              <FormGroup>
-                <Label>Word Category</Label>
-                <Select value={category} onChange={(e) => setCategory(e.target.value)}>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
+          <Card className="shadow-lg border-2 border-primary animate-glowPulse">
+            <CardHeader>
+              <CardTitle>Game Settings</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="category" className="text-primary uppercase tracking-wider">
+                  Word Category
+                </Label>
+                <Select value={category} onValueChange={setCategory}>
+                  <SelectTrigger id="category">
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
                 </Select>
-              </FormGroup>
+              </div>
 
               <Button
                 type="button"
-                variant="primary"
                 size="lg"
-                fullWidth
-                withGlow
+                className="w-full animate-glowPulse"
                 disabled={!canStartGame}
                 onClick={handleStartGame}
               >
                 🎭 Begin Game
               </Button>
-            </Card.Body>
+            </CardContent>
           </Card>
         )}
-      </Form>
-    </Container>
+      </form>
+    </div>
   );
 };
